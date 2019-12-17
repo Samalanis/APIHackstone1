@@ -1,3 +1,4 @@
+
 // a function to get the value from when the user submits
 function pullValue() {
     $('#submitbox').on('click', event => {
@@ -50,32 +51,31 @@ function resultsJson(responseJson, randomArr) {
     $('#displayResults').removeClass('hidden').empty().css({ "margin-top": "200px" });
 
     $('#displayResults').prepend(`
+
   <ul id="listUL">
-  <li><h3>${responseJson.results[randomArr[0]].title}</h3></br>
-  <div class="image-results"><img src="https://image.tmdb.org/t/p/w500/${responseJson.results[randomArr[0]].poster_path}"></div><p>${responseJson.results[randomArr[0]].overview}</li>
-  <li><h3>${responseJson.results[randomArr[1]].title}</h3></br>
-  <div class="image-results"><img src="https://image.tmdb.org/t/p/w500/${responseJson.results[randomArr[1]].poster_path}"></div><p>${responseJson.results[randomArr[1]].overview}</li>
-  <li><h3>${responseJson.results[randomArr[2]].title}</h3></br>
-  <div class="image-results"><img src="https://image.tmdb.org/t/p/w500/${responseJson.results[randomArr[2]].poster_path}"></div><p>${responseJson.results[randomArr[2]].overview}</li>`);
+
+  <div class="container 1">
+  <li>
+  <div class="image-results"><img src="https://image.tmdb.org/t/p/w500/${responseJson.results[randomArr[0]].poster_path}"></div><h3>${responseJson.results[randomArr[0]].title}</h3></br><p>${responseJson.results[randomArr[0]].overview}</li></div>
+
+  <div class="container 2">
+  <li>
+  <div class="image-results"><img src="https://image.tmdb.org/t/p/w500/${responseJson.results[randomArr[1]].poster_path}"></div>
+  <h3>${responseJson.results[randomArr[1]].title}</h3></br><p>${responseJson.results[randomArr[1]].overview}</li></div>
+
+
+  <div class="container 3">
+  <li>
+  <div class="image-results"><img src="https://image.tmdb.org/t/p/w500/${responseJson.results[randomArr[2]].poster_path}"></div><h3>${responseJson.results[randomArr[2]].title}</h3></br><p>${responseJson.results[randomArr[2]].overview}</li></div>`);
 
     $('#heading-1').append(`<i class="fa fa-arrow-circle-down" id="arrow" style="font-size:55px;color:pink"></i>>`);
 
-    $('#heading-1').append(`<section id="heading-2"><h2>It's that easy...</h2></section>`);
 
-    // testing();
+
+
 }
 
 
-/*function testing() {
-  $('#submitbox').on('click', event => {
-    event.preventDefault();
-    $('html, body').animate({
-        scrollTop: $("#listUL").offset().top
-    }, 2000);
-  })
-  console.log('test is running');
-}*/
-/* HTML <input type="submit" value="test" id="test">*/
 
 
 // a function to render functions 
@@ -83,3 +83,4 @@ function renderFunctions() {
     pullValue();
 }
 renderFunctions();
+
