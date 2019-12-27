@@ -5,6 +5,14 @@ function pullValue() {
         event.preventDefault();
         let genValue = $('#selectList').val();
         console.log(` id: ${genValue} `);
+
+        let pages = [];
+        // needs work on this while statement dont want 0 to be a page!
+        while (pages.length < 1) {
+            let p = Math.floor(Math.random() * 4);
+            if (pages.indexOf(p) === -1) pages.push(p);
+        }
+        console.log(`Current page number is ${pages}`);
         queryPull(genValue);
     })
 }
@@ -25,8 +33,11 @@ function loadJson(url) {
 
     let arr = [];
 
+
+
+
     while (arr.length < 3) {
-        var r = Math.floor(Math.random() * 20);
+        let r = Math.floor(Math.random() * 20);
         if (arr.indexOf(r) === -1) arr.push(r);
     }
     console.log(arr);
@@ -66,14 +77,55 @@ function resultsJson(responseJson, randomArr) {
 
   <div class="container 3">
   <li>
-  <div class="image-results"><img src="https://image.tmdb.org/t/p/w500/${responseJson.results[randomArr[2]].poster_path}"></div><h3>${responseJson.results[randomArr[2]].title}</h3></br><p>${responseJson.results[randomArr[2]].overview}</li></div>`);
+  <div class="image-results"><img src="https://image.tmdb.org/t/p/w500/${responseJson.results[randomArr[2]].poster_path}"></div><h3>${responseJson.results[randomArr[2]].title}</h3></br><p>${responseJson.results[randomArr[2]].overview}</li></div></ul>`);
 
-    $('#heading-1').append(`<i class="fa fa-arrow-circle-down" id="arrow" style="font-size:55px;color:pink"></i>>`);
+    $('#heading-1').append(`<a href="#listUL"> <i class="fa fa-arrow-circle-down" id="arrow" style="font-size:55px;color:pink"></i></a>`);
 
-
-
+    arrowDown();
 
 }
+
+
+// function for making the arrow scroll down
+function arrowDown() {
+    $('#arrow').on('click', event => {
+        event.preventDefault();
+        $('html, body').animate({
+            scrollTop: $("#listUL").offset().top
+        }, 2000);
+    })
+    console.log('test is running');
+}
+
+
+
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -81,6 +133,10 @@ function resultsJson(responseJson, randomArr) {
 // a function to render functions 
 function renderFunctions() {
     pullValue();
+
 }
 renderFunctions();
+
+
+
 
