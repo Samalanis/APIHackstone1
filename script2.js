@@ -1,9 +1,6 @@
-// geolocaton url 
-
+// Google API Functions and JS
 // api url key 
 let key = 'AIzaSyDHp5LgUc_PfgXkM0mJlVXcp_Wfik-__BE';
-// movie theater near by pull 
-
 
 // function to retrieve the zipcode
 function getZip() {
@@ -15,18 +12,25 @@ function getZip() {
         let zipCodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${zipCode}&key=${key}`;
         console.log(`ZIPCODE URL: ${zipCodeUrl}`);
 
-        if (zipCode == "")
+        if (zipCode == "") {
             alert("Zipcode field is empty.");
-        else {
+        } else if (zipCode.length > 5) {
+            alert("Zipcode is invalid");
+        } else {
             loadJsonZip(zipCodeUrl);
-        };
-    })
-
+            $("#map").css("display", "block");
+        }
+    });
 }
+
 
 // function for getting the geo location data
 function loadJsonZip(zipUrl) {
     console.log("LOADJSONZIP is running.");
+    $('#map').empty();
+    $('#displayResults').empty();
+    $('#titleResults').empty();
+
     fetch(zipUrl)
         .then(response => {
             if (response.ok) {
@@ -49,37 +53,64 @@ function resultsJsonZip(responseJson) {
     let longitude = responseJson.results[0].geometry.location.lng;
     console.log(longitude);
     console.log(latitude);
-    loadJsonPlaces(latitude, longitude);
+    initMap(latitude, longitude);
 }
 
 
-// function to pass another fetch to with the geolocation data
-function loadJsonPlaces(x, y) {
-    console.log("LOADJSONPLACES is running");
+// function to pass the location details to
+let infowindow;
+let map;
+function initMap(x, y) {
+    console.log("initMap is running");
     let longitude = x;
     let latitude = y;
-    let movieUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${x},` + " " + `${y}&radius=10000&type=movie_theater&key=${key}`;
-    console.log(movieUrl);
+    let service;
 
+    console.log(longitude, latitude);
 
-    fetch(movieUrl, {
-        mode: 'no-cors'})
-        .then(response => {
-            if (repsonse.ok) {
-                return response.json();
-            }
-            throw new Error(response.statusText);
-        })
-        .then(responseJson => showTheaters(responseJson))
-        .catch(err => {
-            $('#errorHandle').text(`Something went wrong: ${err.message}`)
-        })
+    let definedLoc = new google.maps.LatLng(longitude, latitude);
+
+    infowindow = new google.maps.InfoWindow();
+
+    map = new google.maps.Map(
+        document.getElementById('map'), { center: definedLoc, zoom: 12 });
+
+    let request = {
+        location: definedLoc,
+        type: ['movie_theater'],
+        radius: 50000,
+    };
+
+    service = new google.maps.places.PlacesService(map);
+    service.nearbySearch(request, callback);
+
+}
+// function to get the results from the request
+function callback(results, status) {
+    console.log(results);
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+        for (let i = 0; i < results.length; i++) {
+            var place = results[i];
+            createMarker(results[i]);
+        }
+    }
+}
+// function to create the marker on the map
+function createMarker(place) {
+    let marker = new google.maps.Marker({
+        map: map,
+        position: place.geometry.location
+    });
+
+    google.maps.event.addListener(marker, 'click', function () {
+        infowindow.setContent(`<div>${place.name}</div><div>${place.vicinity}</div>`);
+        infowindow.open(map, this);
+    });
 }
 
-// function to append the results on the screen.
-function showTheaters(theaterResults) {
-    console.log(theaterResults);
-}
+
+
+
 
 
 
